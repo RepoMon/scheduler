@@ -15,6 +15,7 @@ $channel_name = 'repo-mon.main';
 $queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
 $queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
 
+printf("rabbit host %s port %s\n", $queue_host, $queue_port);
 
 $connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
 $channel = $connection->channel();

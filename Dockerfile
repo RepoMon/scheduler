@@ -21,10 +21,12 @@ RUN touch /var/log/cron.log
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/bin/composer
 
-CMD ["php", "consume.php"]
+CMD ["run.sh"]
 
 # Move application files into place
 COPY src/ /home/app/
+
+RUN chmod +x /home/app/run.sh
 
 # remove any development cruft
 RUN rm -rf /home/app/vendor/*
