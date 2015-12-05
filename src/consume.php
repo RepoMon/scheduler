@@ -13,7 +13,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $channel_name = 'repo-mon.main';
 $queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
-$queue_port = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
+$queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
 
 
 $connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
