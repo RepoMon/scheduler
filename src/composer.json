@@ -7,5 +7,7 @@
             "email": "tim.rodger@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+      "videlalvaro/php-amqplib": "2.5.*"
+    }
 }
