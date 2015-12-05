@@ -21,7 +21,7 @@ RUN touch /var/log/cron.log
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/bin/composer
 
-CMD ["run.sh"]
+CMD ["/home/app/run.sh"]
 
 # Move application files into place
 COPY src/ /home/app/
