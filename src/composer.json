@@ -1,0 +1,11 @@
+{
+    "name": "timrodger/scheduler",
+    "description": "Event queue powered scheduler",
+    "authors": [
+        {
+            "name": "Tim Rodger",
+            "email": "tim.rodger@gmail.com"
+        }
+    ],
+    "require": {}
+}
