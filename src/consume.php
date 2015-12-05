@@ -3,24 +3,27 @@
  * @author timrodger
  * Date: 05/12/15
  *
- * listens to incoming events
- * updates schedule
+ * Consumes events
+ * Updates schedule
  *
  */
-
 require_once __DIR__ . '/vendor/autoload.php';
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $channel_name = 'repo-mon.main';
+$queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
+$queue_port = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
 
-$connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+
+$connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
 $channel = $connection->channel();
 $channel->queue_declare($channel_name, false, false, false, false);
 
-echo ' [*] Waiting for messages. To exit press CTRL+C', "\n";
+echo ' [*] Waiting for events. To exit press CTRL+C', "\n";
 
-$callback = function($msg) {
-    echo " [x] Received ", $msg->body, "\n";
+$callback = function($event) {
+    echo " [x] Received ", $event->body, "\n";
 };
 
 $channel->basic_consume($channel_name, '', false, true, false, false, $callback);
