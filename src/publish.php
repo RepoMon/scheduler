@@ -29,7 +29,7 @@ $queue_port = 5672;
 
 $connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
 $channel = $connection->channel();
-$channel->queue_declare($channel_name, false, false, false, false);
+$channel->exchange_declare($channel_name, 'fanout', false, false, false);
 
 $event = [
     'name' => 'repo-mon.repo.update.scheduled',

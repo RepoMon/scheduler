@@ -19,7 +19,11 @@ printf(" rabbit host %s port %s\n", $queue_host, $queue_port);
 
 $connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
 $channel = $connection->channel();
-$channel->queue_declare($channel_name, false, false, false, false);
+$channel->exchange_declare($channel_name, 'fanout', false, false, false);
+
+list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
+
+$channel->queue_bind($queue_name, $channel_name);
 
 echo ' Waiting for events. To exit press CTRL+C', "\n";
 
@@ -27,7 +31,7 @@ $callback = function($event) {
     echo " Received ", $event->body, "\n";
 };
 
-$channel->basic_consume($channel_name, '', false, true, false, false, $callback);
+$channel->basic_consume($queue_name, '', false, true, false, false, $callback);
 
 while(count($channel->callbacks)) {
     $channel->wait();
