@@ -23,8 +23,9 @@ $channel_name = 'repo-mon.main';
 // this script runs from cron with a different env to consume.php script
 // use the entry in /etc/hosts to access the rabbit mq server
 
-$queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
-$queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
+// use the hostname
+$queue_host = 'rabbitmq';
+$queue_port = 5672;
 
 $connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
 $channel = $connection->channel();
