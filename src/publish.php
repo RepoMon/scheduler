@@ -43,7 +43,7 @@ $msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
     'timestamp' => time()
 ]);
 
-$channel->basic_publish($msg, '', $channel_name);
+$channel->basic_publish($msg, $channel_name);
 
 $channel->close();
 $connection->close();
