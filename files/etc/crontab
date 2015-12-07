@@ -1,1 +1,2 @@
-*/1 * * * * root php /home/app/publish.php
+*/1 * * * * php /home/app/publish.php
+

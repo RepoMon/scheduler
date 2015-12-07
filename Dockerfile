@@ -2,8 +2,6 @@ FROM ubuntu:latest
 
 MAINTAINER Tim Rodger <tim.rodger@gmail.com>
 
-EXPOSE 80
-
 RUN apt-get update -qq && \
     apt-get install -y \
     php5 \
@@ -11,7 +9,8 @@ RUN apt-get update -qq && \
     php5-intl \
     curl \
     zip \
-    unzip
+    unzip \
+    git
 
 ADD files/etc/crontab /etc/crontab
 ADD files/bin/start-cron.sh /usr/bin/start-cron.sh
@@ -37,8 +36,6 @@ WORKDIR /home/app
 RUN composer install --prefer-dist && \
     apt-get clean
 
-RUN /usr/bin/start-cron.sh
-
-
 USER root
 
+RUN /usr/bin/start-cron.sh

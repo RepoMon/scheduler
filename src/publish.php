@@ -11,6 +11,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 echo "Publishing schedule events\n";
 
@@ -18,6 +19,10 @@ echo "Publishing schedule events\n";
 
 // publish events, one per task
 $channel_name = 'repo-mon.main';
+
+// this script runs from cron with a different env to consume.php script
+// use the entry in /etc/hosts to access the rabbit mq server
+
 $queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
 $queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
 
@@ -37,7 +42,7 @@ $msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
     'timestamp' => time()
 ]);
 
-$channel->basic_publish($msg, '', $this->channel_name);
+$channel->basic_publish($msg, '', $channel_name);
 
 $channel->close();
 $connection->close();
