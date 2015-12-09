@@ -55,8 +55,10 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $expected_hour = 3;
-        $expected_min = 15;
+        $expected_hour = 0;
+        $expected_min = 1;
+        $timestamp = 1;
+
         $data = ['owner' => 'dave'];
 
         $client = $this->getMockBuilder('PDOMock')
@@ -90,8 +92,9 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
             ->method('fetchAll')
             ->will($this->returnValue($result));
 
-        $store->get(1);
+        $tasks = $store->get($timestamp);
 
+        $this->assertSame([$result[0]['name'] => $result[0]['data']], $tasks);
 
     }
 }

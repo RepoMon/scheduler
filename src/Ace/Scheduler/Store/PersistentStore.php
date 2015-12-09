@@ -56,6 +56,24 @@ class PersistentStore implements StoreInterface
      */
     public function get($timestamp)
     {
+        $time = new DateTime();
+        $time->setTimestamp($timestamp);
+        $time->setTimezone(new DateTimeZone('UTC'));
 
+        $statement = $this->client->prepare('SELECT FROM * schedule WHERE hour = :hour and minute = :minute');
+
+        $statement->execute([
+            ':hour' => $time->format('H'),
+            ':minute' => $time->format('m'),
+        ]);
+
+        $tasks = [];
+        $all = $statement->fetchAll();
+
+        foreach ($all as $task) {
+            $tasks[$task['name']] = $task['data'];
+        }
+
+        return $tasks;
     }
 }
