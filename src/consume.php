@@ -23,7 +23,7 @@ $channel->exchange_declare($config->getRabbitChannelName(), 'fanout', false, fal
 
 list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
 
-$channel->queue_bind($queue_name, $channel_name);
+$channel->queue_bind($queue_name, $config->getRabbitChannelName());
 
 echo ' Waiting for events. To exit press CTRL+C', "\n";
 
@@ -45,14 +45,14 @@ $callback = function($event) use ($store) {
 
     if ($event['name'] === 'repo-mon.repo.configured') {
         $store->add(
-            $event['url'],
-            $event['hour'],
-            $event['frequency'],
-            $event['timezone'],
+            $event['data']['url'],
+            $event['data']['hour'],
+            $event['data']['frequency'],
+            $event['data']['timezone'],
             [
-                'owner' => $event['owner'],
-                'language' => $event['language'],
-                'dependency_manager' => $event['dependency_manager']
+                'owner' => $event['data']['owner'],
+                'language' => $event['data']['language'],
+                'dependency_manager' => $event['data']['dependency_manager']
             ]
         );
     }

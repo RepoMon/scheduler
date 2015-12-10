@@ -1,7 +1,6 @@
 <?php namespace Ace\Scheduler\Store;
 
 use PDO;
-use PDOException;
 
 /**
  * @author timrodger
