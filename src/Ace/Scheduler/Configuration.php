@@ -19,7 +19,9 @@ class Configuration
      */
     public function getDbPassword()
     {
-        return getenv('MYSQL_ROOT_PASSWORD');
+        // env vars not available on publish
+        return '1234';
+        //return getenv('MYSQL_ROOT_PASSWORD');
     }
 
     public function getDbHost()

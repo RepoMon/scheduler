@@ -16,6 +16,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 $config = new Configuration();
 
 printf(" rabbit host %s port %s\n", $config->getRabbitHost(), $config->getRabbitPort());
+echo "MYSQL_ROOT_PASSWORD " . getenv('MYSQL_ROOT_PASSWORD') . "\n";
 
 $connection = new AMQPStreamConnection($config->getRabbitHost(), $config->getRabbitPort(), 'guest', 'guest');
 $channel = $connection->channel();
@@ -39,12 +40,13 @@ $store = $factory->create();
 // ensure the database exists
 
 $callback = function($event) use ($store) {
+
     echo " Received ", $event->body, "\n";
 
     $event = json_decode($event->body, true);
 
     if ($event['name'] === 'repo-mon.repo.configured') {
-        $store->add(
+        $result = $store->add(
             $event['data']['url'],
             $event['data']['hour'],
             $event['data']['frequency'],
@@ -52,10 +54,14 @@ $callback = function($event) use ($store) {
             [
                 'owner' => $event['data']['owner'],
                 'language' => $event['data']['language'],
-                'dependency_manager' => $event['data']['dependency_manager']
+                'dependency_manager' => $event['data']['dependency_manager'],
+                'url' => $event['data']['url']
             ]
         );
+
+        echo " Result of insert is '$result'\n";
     }
+
 };
 
 $channel->basic_consume($queue_name, '', false, true, false, false, $callback);

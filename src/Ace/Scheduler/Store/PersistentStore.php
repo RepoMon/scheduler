@@ -36,15 +36,14 @@ class PersistentStore implements StoreInterface
      */
     public function add($name, $hour, $frequency, $timezone, array $data = [])
     {
-        $statement = $this->client->prepare('INSERT INTO :table (name, hour, minute, frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)');
+        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (name, hour, minute, frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)');
 
         // convert $hour in parameter timezone into UTC
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
         $time->setTimezone(new DateTimeZone('UTC'));
 
-        $statement->execute(
+        $result = $statement->execute(
             [
-                ':table' => $this->table_name,
                 ':name' => $name,
                 ':hour' => intval($time->format('H')),
                 ':minute' => 1,
@@ -53,6 +52,10 @@ class PersistentStore implements StoreInterface
                 ':data' => json_encode($data, JSON_UNESCAPED_SLASHES)
             ]
         );
+
+        $statement->closeCursor();
+
+        return $result;
     }
 
     /**
@@ -68,11 +71,10 @@ class PersistentStore implements StoreInterface
         $time->setTimestamp($timestamp);
         $time->setTimezone(new DateTimeZone('UTC'));
 
-        $statement = $this->client->prepare('SELECT FROM * :table WHERE hour = :hour and minute = :minute');
+        $statement = $this->client->prepare('SELECT * FROM  ' . $this->table_name . ' WHERE hour = :hour and minute = :minute');
 
         $statement->execute(
             [
-                ':table' => $this->table_name,
                 ':hour' => intval($time->format('H')),
                 ':minute' => intval($time->format('m')),
             ]
@@ -83,7 +85,7 @@ class PersistentStore implements StoreInterface
         $all = $statement->fetchAll();
 
         foreach ($all as $task) {
-            $tasks[$task['name']] = $task['data'];
+            $tasks[] = json_decode($task['data'], true);;
         }
 
         return $tasks;
