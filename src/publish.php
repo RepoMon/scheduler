@@ -38,7 +38,7 @@ $channel = $connection->channel();
 $channel->exchange_declare($channel_name, 'fanout', false, false, false);
 
 $event = [
-    'name' => 'repo-mon.repo.scheduler.heartbeat',
+    'name' => 'repo-mon.scheduler.heartbeat',
     'data' => [
         'time' => $now
     ]
