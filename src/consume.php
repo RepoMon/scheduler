@@ -9,17 +9,17 @@
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Ace\Scheduler\Configuration;
+use Ace\Scheduler\Store\StoreFactory;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-$channel_name = 'repo-mon.main';
-$queue_host = getenv('RABBITMQ_PORT_5672_TCP_ADDR');
-$queue_port = getenv('RABBITMQ_PORT_5672_TCP_PORT');
+$config = new Configuration();
 
-printf(" rabbit host %s port %s\n", $queue_host, $queue_port);
+printf(" rabbit host %s port %s\n", $config->getRabbitHost(), $config->getRabbitPort());
 
-$connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
+$connection = new AMQPStreamConnection($config->getRabbitHost(), $config->getRabbitPort(), 'guest', 'guest');
 $channel = $connection->channel();
-$channel->exchange_declare($channel_name, 'fanout', false, false, false);
+$channel->exchange_declare($config->getRabbitChannelName(), 'fanout', false, false, false);
 
 list($queue_name, ,) = $channel->queue_declare("", false, false, true, false);
 
@@ -27,8 +27,35 @@ $channel->queue_bind($queue_name, $channel_name);
 
 echo ' Waiting for events. To exit press CTRL+C', "\n";
 
-$callback = function($event) {
+$factory = new StoreFactory(
+    $config->getDbHost(),
+    $config->getDbName(),
+    $config->getDbUser(),
+    $config->getDbPassword()
+);
+
+$store = $factory->create();
+
+// ensure the database exists
+
+$callback = function($event) use ($store) {
     echo " Received ", $event->body, "\n";
+
+    $event = json_decode($event->body, true);
+
+    if ($event['name'] === 'repo-mon.repo.configured') {
+        $store->add(
+            $event['url'],
+            $event['hour'],
+            $event['frequency'],
+            $event['timezone'],
+            [
+                'owner' => $event['owner'],
+                'language' => $event['language'],
+                'dependency_manager' => $event['dependency_manager']
+            ]
+        );
+    }
 };
 
 $channel->basic_consume($queue_name, '', false, true, false, false, $callback);

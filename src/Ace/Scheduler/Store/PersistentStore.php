@@ -16,9 +16,15 @@ class PersistentStore implements StoreInterface
      */
     private $client;
 
-    public function __construct(PDO $client)
+    /**
+     * @var string
+     */
+    private $table_name;
+
+    public function __construct(PDO $client, $table_name)
     {
         $this->client = $client;
+        $this->table_name = $table_name;
     }
 
     /**
@@ -30,7 +36,7 @@ class PersistentStore implements StoreInterface
      */
     public function add($name, $hour, $frequency, $timezone, array $data = [])
     {
-        $statement = $this->client->prepare('INSERT INTO schedule (name, hour, minute, $frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)');
+        $statement = $this->client->prepare('INSERT INTO :table (name, hour, minute, frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)');
 
         // convert $hour in parameter timezone into UTC
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
@@ -38,9 +44,11 @@ class PersistentStore implements StoreInterface
 
         $statement->execute(
             [
+                ':table' => $this->table_name,
                 ':name' => $name,
-                ':hour' => $time->format('H'),
-                ':minute' => '1',
+                ':hour' => intval($time->format('H')),
+                ':minute' => 1,
+                ':frequency' => intval($frequency),
                 ':timezone' => 'UTC',
                 ':data' => json_encode($data, JSON_UNESCAPED_SLASHES)
             ]
@@ -60,14 +68,18 @@ class PersistentStore implements StoreInterface
         $time->setTimestamp($timestamp);
         $time->setTimezone(new DateTimeZone('UTC'));
 
-        $statement = $this->client->prepare('SELECT FROM * schedule WHERE hour = :hour and minute = :minute');
+        $statement = $this->client->prepare('SELECT FROM * :table WHERE hour = :hour and minute = :minute');
 
-        $statement->execute([
-            ':hour' => $time->format('H'),
-            ':minute' => $time->format('m'),
-        ]);
+        $statement->execute(
+            [
+                ':table' => $this->table_name,
+                ':hour' => intval($time->format('H')),
+                ':minute' => intval($time->format('m')),
+            ]
+        );
 
         $tasks = [];
+
         $all = $statement->fetchAll();
 
         foreach ($all as $task) {
