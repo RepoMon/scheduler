@@ -62,13 +62,11 @@ $store = $factory->create();
 
 $tasks = $store->get($now);
 
-foreach ($tasks as $repository => $content) {
-    $data = json_decode($content, true);
-    $data['repository'] = $repository;
+foreach ($tasks as $content) {
 
     $event = [
         'name' => 'repo-mon.update.scheduled',
-        'data' => $data
+        'data' => $content
     ];
 
     $msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
