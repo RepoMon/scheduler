@@ -81,7 +81,7 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
 
         $client->expects($this->once())
             ->method('prepare')
-            ->with('SELECT FROM * tasks WHERE hour = :hour and minute = :minute')
+            ->with('SELECT * FROM tasks WHERE hour = :hour and minute = :minute')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
