@@ -94,7 +94,7 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
 
         $tasks = $store->get($timestamp);
 
-        $this->assertSame([$result[0]['data']], $tasks);
+        $this->assertSame($data, $tasks[0]);
 
     }
 }
