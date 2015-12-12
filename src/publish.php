@@ -1,41 +1,21 @@
 <?php
 /**
  * @author timrodger
- * Date: 05/12/15
  *
- * Run by cron tab
  * Checks schedule
- * Publishes events
+ * Publishes repo-mon.update.scheduled events
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+$app = require_once __DIR__ .'/app.php';
+$app->boot();
 
-use Ace\Scheduler\Configuration;
-use Ace\Scheduler\Store\RDBMSStoreFactory;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
-
-$config = new Configuration();
-
-echo "Publishing schedule events\n";
-echo "MYSQL_ROOT_PASSWORD " . getenv('MYSQL_ROOT_PASSWORD') . "\n";
-
-// get scheduled tasks from store that should be run now
-
-// publish events, one per task
-$channel_name = 'repo-mon.main';
-
-// this script runs from cron with a different env to consume.php script
-// use the entry in /etc/hosts to access the rabbit mq server
-
-// use the hostname
-$queue_host = 'rabbitmq';
-$queue_port = 5672;
 $now = time();
 
-$connection = new AMQPStreamConnection($queue_host, $queue_port, 'guest', 'guest');
-$channel = $connection->channel();
-$channel->exchange_declare($channel_name, 'fanout', false, false, false);
+printf("rabbit host: %s port: %s channel: %s\n",
+    $app['config']->getRabbitHost(),
+    $app['config']->getRabbitPort(),
+    $app['config']->getRabbitChannelName()
+);
 
 $event = [
     'name' => 'repo-mon.scheduler.heartbeat',
@@ -43,24 +23,9 @@ $event = [
         'time' => $now
     ]
 ];
+$app['queue-client']->publish($event);
 
-$msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
-    'content_type' => 'application/json',
-    'timestamp' => $now
-]);
-
-$channel->basic_publish($msg, $channel_name);
-
-$factory = new RDBMSStoreFactory(
-    $config->getDbHost(),
-    $config->getDbName(),
-    $config->getDbUser(),
-    $config->getDbPassword()
-);
-
-$store = $factory->create();
-
-$tasks = $store->get($now);
+$tasks = $app['store']->get($now);
 
 foreach ($tasks as $content) {
 
@@ -68,14 +33,5 @@ foreach ($tasks as $content) {
         'name' => 'repo-mon.update.scheduled',
         'data' => $content
     ];
-
-    $msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
-        'content_type' => 'application/json',
-        'timestamp' => time()
-    ]);
-
-    $channel->basic_publish($msg, $channel_name);
+    $app['queue-client']->publish($event);
 }
-
-$channel->close();
-$connection->close();
