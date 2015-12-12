@@ -6,7 +6,7 @@ use PDO;
  * @author timrodger
  * Date: 10/12/15
  */
-class StoreFactory
+class RDBMSStoreFactory implements StoreFactoryInterface
 {
     /**
      * @var string

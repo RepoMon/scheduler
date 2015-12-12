@@ -10,7 +10,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Ace\Scheduler\Configuration;
-use Ace\Scheduler\Store\StoreFactory;
+use Ace\Scheduler\Store\RDBMSStoreFactory;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $config = new Configuration();
@@ -28,7 +28,7 @@ $channel->queue_bind($queue_name, $config->getRabbitChannelName());
 
 echo ' Waiting for events. To exit press CTRL+C', "\n";
 
-$factory = new StoreFactory(
+$factory = new RDBMSStoreFactory(
     $config->getDbHost(),
     $config->getDbName(),
     $config->getDbUser(),

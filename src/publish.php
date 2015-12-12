@@ -11,7 +11,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Ace\Scheduler\Configuration;
-use Ace\Scheduler\Store\StoreFactory;
+use Ace\Scheduler\Store\RDBMSStoreFactory;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -51,7 +51,7 @@ $msg = new AMQPMessage(json_encode($event, JSON_UNESCAPED_SLASHES), [
 
 $channel->basic_publish($msg, $channel_name);
 
-$factory = new StoreFactory(
+$factory = new RDBMSStoreFactory(
     $config->getDbHost(),
     $config->getDbName(),
     $config->getDbUser(),

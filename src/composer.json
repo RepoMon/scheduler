@@ -8,6 +8,8 @@
         }
     ],
     "require": {
+      "silex/silex": "1.3.*",
+      "monolog/monolog": "~1.15",
       "predis/predis": "1.1.*@dev",
       "guzzlehttp/guzzle": "~5.0@dev",
       "videlalvaro/php-amqplib": "2.5.*"
