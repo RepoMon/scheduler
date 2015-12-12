@@ -8,7 +8,7 @@ use DateTimeZone;
  * @author timrodger
  * Date: 09/12/15
  */
-class PersistentStore implements StoreInterface
+class RDBMSStore implements StoreInterface
 {
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-use Ace\Scheduler\Store\PersistentStore;
+use Ace\Scheduler\Store\RDBMSStore;
 
 class PDOMock extends \PDO {
     public function __construct() {}
@@ -10,7 +10,7 @@ class PDOMock extends \PDO {
  * @author timrodger
  * Date: 09/12/15
  */
-class PersistentStoreTest extends PHPUnit_Framework_TestCase
+class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -25,7 +25,7 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
         $client = $this->getMockBuilder('PDOMock')
             ->getMock();
 
-        $store = new PersistentStore($client, 'tasks');
+        $store = new RDBMSStore($client, 'tasks');
         $name = 'test/test-repo';
         $data = [];
 
@@ -64,7 +64,7 @@ class PersistentStoreTest extends PHPUnit_Framework_TestCase
         $client = $this->getMockBuilder('PDOMock')
             ->getMock();
 
-        $store = new PersistentStore($client, 'tasks');
+        $store = new RDBMSStore($client, 'tasks');
         $result = [
             [
                 'name' => 'owner/repo',

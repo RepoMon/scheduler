@@ -59,6 +59,6 @@ class StoreFactory
         // next ensure table exists
         $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (name TEXT, hour INT, minute INT, frequency INT, timezone TEXT, data TEXT)', $this->table_name));
 
-        return new PersistentStore($pdo, $this->table_name);
+        return new RDBMSStore($pdo, $this->table_name);
     }
 }
