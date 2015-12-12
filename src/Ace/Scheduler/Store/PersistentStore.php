@@ -72,7 +72,7 @@ class PersistentStore implements StoreInterface
         $time->setTimestamp($timestamp);
         $time->setTimezone(new DateTimeZone('UTC'));
 
-        $statement = $this->client->prepare('SELECT * FROM  ' . $this->table_name . ' WHERE hour = :hour and minute = :minute');
+        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE hour = :hour and minute = :minute');
 
         $statement->execute(
             [
