@@ -42,6 +42,7 @@ class PersistentStore implements StoreInterface
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
         $time->setTimezone(new DateTimeZone('UTC'));
 
+        // pick minute for schedule based on current tasks at this hour
         $result = $statement->execute(
             [
                 ':name' => $name,
