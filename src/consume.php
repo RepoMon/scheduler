@@ -10,10 +10,12 @@ $app = require_once __DIR__ .'/app.php';
 $app->boot();
 
 printf("rabbit host: %s port: %s channel: %s\n",
-    $app['config']->getRabbitHost(), 
+    $app['config']->getRabbitHost(),
     $app['config']->getRabbitPort(),
     $app['config']->getRabbitChannelName()
 );
+
+$store = $app['store'];
 
 $callback = function($event) use ($store) {
 
