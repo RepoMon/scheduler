@@ -38,6 +38,9 @@ $callback = function($event) use ($store) {
         );
 
         echo " Result of insert is '$result'\n";
+    } else if ($event['name'] === 'repo-mon.repo.configured') {
+        $result = $store->delete($event['data']['url']);
+        echo " Result of delete is '$result'\n";
     }
 };
 
