@@ -1,5 +1,6 @@
 <?php namespace Ace\Scheduler\Store;
 
+use Ace\Scheduler\Exception\NotFoundException;
 use PDO;
 use DateTime;
 use DateTimeZone;
@@ -107,7 +108,7 @@ class RDBMSStore implements StoreInterface
 
         $all = $statement->fetchAll();
         if (!count($all)){
-            throw new Exception("No schedules found for '$repository'");
+            throw new NotFoundException("No schedules found for '$repository'");
         }
 
         return $all;
@@ -125,12 +126,12 @@ class RDBMSStore implements StoreInterface
      * @param $name
      * @return mixed
      */
-    public function delete($repository)
+    public function delete($name)
     {
         $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE name = :name');
         $statement->execute(
             [
-                ':name' => $repository
+                ':name' => $name
             ]
         );
     }
