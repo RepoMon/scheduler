@@ -36,7 +36,8 @@ $app->get('/schedules/{repository}', function(Request $request, $repository) use
 })->assert('repository', '.+');
 
 /**
- * Remove a schedule
+ * Remove a schedule - should be performed by consuming an event
+ * no need for an endpoint
  */
 $app->delete('/schedules/{repository}', function(Request $request, $repository) use ($app){
 
