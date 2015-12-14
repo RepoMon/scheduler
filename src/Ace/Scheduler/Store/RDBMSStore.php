@@ -3,6 +3,7 @@
 use PDO;
 use DateTime;
 use DateTimeZone;
+use Exception;
 
 /**
  * @author timrodger
@@ -90,5 +91,47 @@ class RDBMSStore implements StoreInterface
         }
 
         return $tasks;
+    }
+
+    /**
+     * @param $repository
+     */
+    public function getByName($repository)
+    {
+        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE name = :name');
+        $statement->execute(
+            [
+                ':name' => $repository
+            ]
+        );
+
+        $all = $statement->fetchAll();
+        if (!count($all)){
+            throw new Exception("No schedules found for '$repository'");
+        }
+
+        return $all;
+    }
+
+    /**
+     * @param $query
+     * @return array
+     */
+    public function filter($query)
+    {
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function delete($repository)
+    {
+        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE name = :name');
+        $statement->execute(
+            [
+                ':name' => $repository
+            ]
+        );
     }
 }

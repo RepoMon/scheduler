@@ -97,4 +97,32 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $this->assertSame($data, $tasks[0]);
 
     }
+
+    public function testGetByName()
+    {
+        $client = $this->getMockBuilder('PDOMock')
+            ->getMock();
+
+        $store = new RDBMSStore($client, 'tasks');
+
+        $mock_statement = $this->getMockBuilder('PDOStatement')
+            ->getMock();
+
+        $client->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM tasks WHERE name = :name')
+            ->will($this->returnValue($mock_statement));
+
+        $mock_statement->expects($this->once())
+            ->method('execute')
+            ->with([':name' => 'owner/repo']);
+
+        $mock_statement->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue(['owner/repo']));
+
+        $task = $store->getByName('owner/repo');
+
+        $this->assertSame(['owner/repo'], $task);
+    }
 }

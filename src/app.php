@@ -25,14 +25,23 @@ $app->register(new QueueClientProvider());
 
 
 /**
- * List all schedules
+ * Get a schedule
  */
-$app->get('/', function(Request $request) use ($app){
+$app->get('/schedules/{repository}', function(Request $request, $repository) use ($app){
 
-    return new Response(
-        json_encode($app['store']->filter('*'), JSON_UNESCAPED_SLASHES),
-        200
-    );
+    $result = json_encode($app['store']->getByName($repository), JSON_UNESCAPED_SLASHES);
+
+    return new Response($result, 200);
+});
+
+/**
+ * Remove a schedule
+ */
+$app->delete('/schedules/{repository}', function(Request $request, $repository) use ($app){
+
+    $app['store']->delete($repository);
+
+    return new Response('', 200);
 });
 
 /**

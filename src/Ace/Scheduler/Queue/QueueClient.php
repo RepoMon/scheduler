@@ -2,7 +2,7 @@
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Channel\AMQPChannel;;
+use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  * @author timrodger

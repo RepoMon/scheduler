@@ -27,4 +27,22 @@ interface StoreInterface
      * @return array keyed on name
      */
     public function get($timestamp);
+
+    /**
+     * @param $repository
+     * @return boolean
+     */
+    public function getByName($repository);
+
+    /**
+     * @param $query
+     * @return array
+     */
+    public function filter($query);
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function delete($name);
 }
