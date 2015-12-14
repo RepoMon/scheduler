@@ -32,7 +32,8 @@ $app->get('/schedules/{repository}', function(Request $request, $repository) use
     $result = json_encode($app['store']->getByName($repository), JSON_UNESCAPED_SLASHES);
 
     return new Response($result, 200);
-});
+
+})->assert('repository', '.+');
 
 /**
  * Remove a schedule
@@ -42,13 +43,14 @@ $app->delete('/schedules/{repository}', function(Request $request, $repository) 
     $app['store']->delete($repository);
 
     return new Response('', 200);
-});
+
+})->assert('repository', '.+');
 
 /**
  */
 $app->error(function (Exception $e, $code) use($app) {
     $app['logger']->addError($e->getMessage());
-    return new Response($e->getMessage(), $e->getCode());
+    return new Response($e->getMessage(), $e->getCode() ? ($e->getCode() > 99) : 500);
 });
 
 return $app;

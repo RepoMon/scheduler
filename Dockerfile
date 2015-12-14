@@ -2,6 +2,8 @@ FROM ubuntu:latest
 
 MAINTAINER Tim Rodger <tim.rodger@gmail.com>
 
+EXPOSE 80
+
 RUN apt-get update -qq && \
     apt-get install -y \
     php5 \
