@@ -30,15 +30,15 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $name
+     * @param string $url
      * @param string $hour
      * @param string $frequency
      * @param string $timezone
      * @param array $data
      */
-    public function add($name, $hour, $frequency, $timezone, array $data = [])
+    public function add($url, $hour, $frequency, $timezone)
     {
-        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (name, hour, minute, frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)');
+        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (url, hour, minute, frequency, timezone) VALUES(:url, :hour, :minute, :frequency, :timezone)');
 
         // convert $hour in parameter timezone into UTC
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
@@ -47,12 +47,11 @@ class RDBMSStore implements StoreInterface
         // pick minute for schedule based on current tasks at this hour
         $result = $statement->execute(
             [
-                ':name' => $name,
+                ':url' => $url,
                 ':hour' => intval($time->format('H')),
                 ':minute' => 1,
                 ':frequency' => intval($frequency),
-                ':timezone' => 'UTC',
-                ':data' => json_encode($data, JSON_UNESCAPED_SLASHES)
+                ':timezone' => 'UTC'
             ]
         );
 
@@ -66,7 +65,7 @@ class RDBMSStore implements StoreInterface
      *
      * @param $timestamp integer
      *
-     * @return array keyed on name
+     * @return array keyed on url
      */
     public function get($timestamp)
     {
@@ -83,32 +82,25 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        $tasks = [];
-
-        $all = $statement->fetchAll();
-
-        foreach ($all as $task) {
-            $tasks[] = json_decode($task['data'], true);;
-        }
-
-        return $tasks;
+        return $statement->fetchAll();
     }
 
     /**
-     * @param $repository
+     * @param $url
+     * @return array
      */
-    public function getByName($repository)
+    public function getByUrl($url)
     {
-        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE name = :name');
+        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE url = :url');
         $statement->execute(
             [
-                ':name' => $repository
+                ':url' => $url
             ]
         );
 
         $all = $statement->fetchAll();
         if (!count($all)){
-            throw new NotFoundException("No schedules found for '$repository'");
+            throw new NotFoundException("No schedules found for '$url'");
         }
 
         return $all;
@@ -123,15 +115,15 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param $name
+     * @param $url
      * @return mixed
      */
-    public function delete($name)
+    public function delete($url)
     {
-        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE name = :name');
+        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE url = :url');
         $statement->execute(
             [
-                ':name' => $name
+                ':url' => $url
             ]
         );
     }

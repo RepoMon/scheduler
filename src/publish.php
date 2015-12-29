@@ -31,7 +31,7 @@ foreach ($tasks as $content) {
 
     $event = [
         'name' => 'repo-mon.update.scheduled',
-        'data' => $content
+        'data' => ['url' => $content['name']]
     ];
     $app['queue-client']->publish($event);
 }

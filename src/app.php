@@ -29,7 +29,7 @@ $app->register(new QueueClientProvider());
  */
 $app->get('/schedules/{repository}', function(Request $request, $repository) use ($app){
 
-    $result = json_encode($app['store']->getByName($repository), JSON_UNESCAPED_SLASHES);
+    $result = json_encode($app['store']->getByUrl($repository), JSON_UNESCAPED_SLASHES);
 
     return new Response($result, 200);
 

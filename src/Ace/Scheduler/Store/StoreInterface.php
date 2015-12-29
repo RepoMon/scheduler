@@ -10,14 +10,13 @@
 interface StoreInterface
 {
     /**
-     * @param $repo string
+     * @param $url string
      * @param $hour string
      * @param $frequency string
      * @param $timezone string
-     * @param $data array
      * @return null
      */
-    public function add($name, $hour, $frequency, $timezone, array $data = []);
+    public function add($url, $hour, $frequency, $timezone);
 
     /**
      * Return all matching tasks matching the parameter timestamp
@@ -29,10 +28,10 @@ interface StoreInterface
     public function get($timestamp);
 
     /**
-     * @param $repository
+     * @param $url
      * @return boolean
      */
-    public function getByName($repository);
+    public function getByUrl($url);
 
     /**
      * @param $query

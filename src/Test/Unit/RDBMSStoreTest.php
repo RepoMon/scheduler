@@ -26,21 +26,20 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $store = new RDBMSStore($client, 'tasks');
-        $name = 'test/test-repo';
-        $data = [];
+        $url = 'https://github.com/test/test-repo';
 
         $mock_statement = $this->getMockBuilder('PDOStatement')
             ->getMock();
         $client->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO tasks (name, hour, minute, frequency, timezone, data) VALUES(:name, :hour, :minute, :frequency, :timezone, :data)')
+            ->with('INSERT INTO tasks (url, hour, minute, frequency, timezone) VALUES(:url, :hour, :minute, :frequency, :timezone)')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':name' => $name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC', ':data' => json_encode($data, JSON_UNESCAPED_SLASHES)]);
+            ->with([':url' => $url, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC']);
 
-        $store->add($name, $hour, $frequency, $timezone, $data);
+        $store->add($url, $hour, $frequency, $timezone);
     }
 
     public function getAddData()
@@ -59,7 +58,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $expected_min = 1;
         $timestamp = 1;
 
-        $data = ['owner' => 'dave'];
+        $url = 'https://github.com/owner/repo';
 
         $client = $this->getMockBuilder('PDOMock')
             ->getMock();
@@ -67,12 +66,11 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
         $store = new RDBMSStore($client, 'tasks');
         $result = [
             [
-                'name' => 'owner/repo',
+                'url' => $url,
                 'hour' => $expected_hour,
                 'minute' => $expected_min,
                 'frequency' => '1',
-                'timezone' => 'UTC',
-                'data' => json_encode($data, JSON_UNESCAPED_SLASHES)
+                'timezone' => 'UTC'
             ]
         ];
 
@@ -94,11 +92,11 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $tasks = $store->get($timestamp);
 
-        $this->assertSame($data, $tasks[0]);
+        $this->assertSame($result, $tasks);
 
     }
 
-    public function testGetByName()
+    public function testGetByUrl()
     {
         $client = $this->getMockBuilder('PDOMock')
             ->getMock();
@@ -110,18 +108,18 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $client->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM tasks WHERE name = :name')
+            ->with('SELECT * FROM tasks WHERE url = :url')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':name' => 'owner/repo']);
+            ->with([':url' => 'owner/repo']);
 
         $mock_statement->expects($this->once())
             ->method('fetchAll')
             ->will($this->returnValue(['owner/repo']));
 
-        $task = $store->getByName('owner/repo');
+        $task = $store->getByUrl('owner/repo');
 
         $this->assertSame(['owner/repo'], $task);
     }

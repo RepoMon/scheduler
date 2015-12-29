@@ -57,7 +57,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
         $pdo->query(sprintf('use %s', $this->db_name));
 
         // next ensure table exists
-        $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (name TEXT, hour INT, minute INT, frequency INT, timezone TEXT, data TEXT)', $this->table_name));
+        $pdo->query(sprintf('CREATE TABLE IF NOT EXISTS %s (url TEXT UNIQUE, hour INT, minute INT, frequency INT, timezone TEXT)', $this->table_name));
 
         return new RDBMSStore($pdo, $this->table_name);
     }

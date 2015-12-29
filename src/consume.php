@@ -23,18 +23,16 @@ $callback = function($event) use ($store) {
 
     $event = json_decode($event->body, true);
 
+    // overwrite any existing configuration
     if ($event['name'] === 'repo-mon.repo.configured') {
+
+        $store->delete($event['data']['url']);
+
         $result = $store->add(
             $event['data']['url'],
             $event['data']['hour'],
             $event['data']['frequency'],
-            $event['data']['timezone'],
-            [
-                'owner' => $event['data']['owner'],
-                'language' => $event['data']['language'],
-                'dependency_manager' => $event['data']['dependency_manager'],
-                'url' => $event['data']['url']
-            ]
+            $event['data']['timezone']
         );
 
         echo " Result of insert is '$result'\n";
