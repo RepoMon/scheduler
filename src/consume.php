@@ -24,7 +24,7 @@ $callback = function($event) use ($store) {
     $event = json_decode($event->body, true);
 
     // overwrite any existing configuration
-    if ($event['name'] === 'repo-mon.repo.activated') {
+    if ($event['name'] === 'repo-mon.repository.activated') {
 
         $store->delete($event['data']['full_name']);
 
@@ -37,7 +37,7 @@ $callback = function($event) use ($store) {
 
         echo " Result of insert is '$result'\n";
 
-    } else if ($event['name'] === 'repo-mon.repo.deactivated') {
+    } else if ($event['name'] === 'repo-mon.repository.deactivated') {
 
         $result = $store->delete($event['data']['full_name']);
         echo " Result of delete is '$result'\n";
