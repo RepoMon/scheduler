@@ -30,15 +30,15 @@ class RDBMSStore implements StoreInterface
     }
 
     /**
-     * @param string $url
+     * @param string $full_name
      * @param string $hour
      * @param string $frequency
      * @param string $timezone
      * @param array $data
      */
-    public function add($url, $hour, $frequency, $timezone)
+    public function add($full_name, $hour, $frequency, $timezone)
     {
-        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (url, hour, minute, frequency, timezone) VALUES(:url, :hour, :minute, :frequency, :timezone)');
+        $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (full_name, hour, minute, frequency, timezone) VALUES(:full_name, :hour, :minute, :frequency, :timezone)');
 
         // convert $hour in parameter timezone into UTC
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
@@ -47,7 +47,7 @@ class RDBMSStore implements StoreInterface
         // pick minute for schedule based on current tasks at this hour
         $result = $statement->execute(
             [
-                ':url' => $url,
+                ':full_name' => $full_name,
                 ':hour' => intval($time->format('H')),
                 ':minute' => 1,
                 ':frequency' => intval($frequency),
@@ -89,41 +89,33 @@ class RDBMSStore implements StoreInterface
      * @param $url
      * @return array
      */
-    public function getByUrl($url)
+    public function getByFullName($full_name)
     {
-        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE url = :url');
+        $statement = $this->client->prepare('SELECT * FROM ' . $this->table_name . ' WHERE full_name = :full_name');
         $statement->execute(
             [
-                ':url' => $url
+                ':full_name' => $full_name
             ]
         );
 
         $all = $statement->fetchAll();
         if (!count($all)){
-            throw new NotFoundException("No schedules found for '$url'");
+            throw new NotFoundException("No schedules found for '$full_name'");
         }
 
         return $all;
     }
 
     /**
-     * @param $query
-     * @return array
-     */
-    public function filter($query)
-    {
-    }
-
-    /**
      * @param $url
      * @return mixed
      */
-    public function delete($url)
+    public function delete($full_name)
     {
-        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE url = :url');
+        $statement = $this->client->prepare('DELETE FROM ' . $this->table_name . ' WHERE full_name = :full_name');
         $statement->execute(
             [
-                ':url' => $url
+                ':full_name' => $full_name
             ]
         );
     }

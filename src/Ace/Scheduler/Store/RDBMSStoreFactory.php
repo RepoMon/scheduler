@@ -59,7 +59,7 @@ class RDBMSStoreFactory implements StoreFactoryInterface
         // next ensure table exists
         $pdo->query(sprintf('
           CREATE TABLE IF NOT EXISTS %s (
-            url VARCHAR (2048) UNIQUE NOT NULL,
+            full_name VARCHAR (2048) UNIQUE NOT NULL,
             hour INT NOT NULL,
             minute INT NOT NULL,
             frequency INT NOT NULL,

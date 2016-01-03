@@ -24,20 +24,22 @@ $callback = function($event) use ($store) {
     $event = json_decode($event->body, true);
 
     // overwrite any existing configuration
-    if ($event['name'] === 'repo-mon.repo.configured') {
+    if ($event['name'] === 'repo-mon.repo.activated') {
 
-        $store->delete($event['data']['url']);
+        $store->delete($event['data']['full_name']);
 
         $result = $store->add(
-            $event['data']['url'],
+            $event['data']['full_name'],
             $event['data']['hour'],
             $event['data']['frequency'],
             $event['data']['timezone']
         );
 
         echo " Result of insert is '$result'\n";
-    } else if ($event['name'] === 'repo-mon.repo.unconfigured') {
-        $result = $store->delete($event['data']['url']);
+
+    } else if ($event['name'] === 'repo-mon.repo.deactivated') {
+
+        $result = $store->delete($event['data']['full_name']);
         echo " Result of delete is '$result'\n";
     }
 };

@@ -10,34 +10,28 @@
 interface StoreInterface
 {
     /**
-     * @param $url string
-     * @param $hour string
-     * @param $frequency string
-     * @param $timezone string
+     * @param string $full_name
+     * @param string $hour
+     * @param string $frequency
+     * @param string $timezone
      * @return null
      */
-    public function add($url, $hour, $frequency, $timezone);
+    public function add($full_name, $hour, $frequency, $timezone);
 
     /**
      * Return all matching tasks matching the parameter timestamp
      *
-     * @param $timestamp integer
+     * @param integer $timestamp
      *
      * @return array keyed on name
      */
     public function get($timestamp);
 
     /**
-     * @param $url
+     * @param $full_name
      * @return boolean
      */
-    public function getByUrl($url);
-
-    /**
-     * @param $query
-     * @return array
-     */
-    public function filter($query);
+    public function getByFullName($full_name);
 
     /**
      * @param $name
