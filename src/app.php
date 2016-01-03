@@ -51,7 +51,8 @@ $app->delete('/schedules/{repository}', function(Request $request, $repository) 
  */
 $app->error(function (Exception $e, $code) use($app) {
     $app['logger']->addError($e->getMessage());
-    return new Response($e->getMessage(), $e->getCode() ? ($e->getCode() > 99) : 500);
+    $status = ($e->getCode() > 99) ? $e->getCode() : 500;
+    return new Response($e->getMessage(), $status);
 });
 
 return $app;
