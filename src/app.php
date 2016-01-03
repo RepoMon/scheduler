@@ -48,6 +48,8 @@ $app->delete('/schedules/{repository}', function(Request $request, $repository) 
 })->assert('repository', '.+');
 
 /**
+ * Catch exceptions and respond with an appropriate message and status code
+ * Works for web requests
  */
 $app->error(function (Exception $e, $code) use($app) {
     $app['logger']->addError($e->getMessage());

@@ -35,6 +35,10 @@ class QueueClient
      */
     private $channel;
 
+    /**
+     * @var array
+     */
+    private $event_handlers = [];
 
     /**
      * @param $host
@@ -88,11 +92,33 @@ class QueueClient
     }
 
     /**
+     * Add a handler function for an event
+     *
+     * @param $event
      * @param callable $callback
      */
-    public function consume(callable $callback)
+    public function addEventHandler($event, callable $callback)
     {
-        //printf(" %s host %s port %s channel %s\n", __METHOD__, $this->host, $this->port, $this->channel_name);
+        $this->event_handlers[$event] = $callback;
+    }
+
+    /**
+     * Sit in loop waiting for incoming messages
+     * Call event handlers to consume events
+     */
+    public function consume()
+    {
+        $handlers = $this->event_handlers;
+
+        $callback = function($message) use ($handlers) {
+
+            $event = json_decode($message->body, true);
+
+            if (array_key_exists($event['name'], $handlers)){
+                $handlers[$event['name']]($event);
+            }
+        };
+
         $this->connect();
 
         list($queue_name, ,) = $this->channel->queue_declare("", false, false, true, false);
