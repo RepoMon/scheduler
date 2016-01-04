@@ -10,13 +10,13 @@
 interface StoreInterface
 {
     /**
-     * @param string $full_name
-     * @param string $hour
-     * @param string $frequency
-     * @param string $timezone
-     * @return null
+     * @param $full_name
+     * @param $timezone
+     * @param int $hour
+     * @param int $frequency
+     * @return bool
      */
-    public function add($full_name, $hour, $frequency, $timezone);
+    public function add($full_name, $timezone, $hour = 1, $frequency = 1);
 
     /**
      * Return all matching tasks matching the parameter timestamp

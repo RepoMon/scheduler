@@ -31,12 +31,12 @@ class RDBMSStore implements StoreInterface
 
     /**
      * @param string $full_name
-     * @param string $hour
-     * @param string $frequency
      * @param string $timezone
-     * @param array $data
+     * @param int $hour
+     * @param int $frequency
+     * @return bool
      */
-    public function add($full_name, $hour, $frequency, $timezone)
+    public function add($full_name, $timezone, $hour = 1, $frequency = 1)
     {
         $statement = $this->client->prepare('INSERT INTO ' . $this->table_name . ' (full_name, hour, minute, frequency, timezone) VALUES(:full_name, :hour, :minute, :frequency, :timezone)');
 
@@ -44,7 +44,6 @@ class RDBMSStore implements StoreInterface
         $time = new DateTime(sprintf('%s:00', $hour), new DateTimeZone($timezone));
         $time->setTimezone(new DateTimeZone('UTC'));
 
-        // pick minute for schedule based on current tasks at this hour
         $result = $statement->execute(
             [
                 ':full_name' => $full_name,
@@ -63,7 +62,7 @@ class RDBMSStore implements StoreInterface
     /**
      * Return all matching tasks matching the parameter timestamp
      *
-     * @param $timestamp integer
+     * @param $timestamp integer unix timestamp
      *
      * @return array keyed on url
      */

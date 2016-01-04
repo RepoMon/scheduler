@@ -27,11 +27,11 @@ $app['queue-client']->publish($event);
 
 $tasks = $app['store']->get($now);
 
-foreach ($tasks as $content) {
+foreach ($tasks as $task) {
 
     $event = [
         'name' => 'repo-mon.update.scheduled',
-        'data' => ['url' => $content['name']]
+        'data' => ['full_name' => $task['full_name']]
     ];
     $app['queue-client']->publish($event);
 }

@@ -24,8 +24,6 @@ $addHandler = function($event) use ($store) {
 
     $result = $store->add(
         $event['data']['full_name'],
-        $event['data']['hour'],
-        $event['data']['frequency'],
         $event['data']['timezone']
     );
 
