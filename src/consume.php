@@ -43,4 +43,4 @@ $app['queue-client']->addEventHandler('repo-mon.repository.deactivated', $remove
 
 $app['queue-client']->addEventHandler('repo-mon.repository.removed', $removeHandler);
 
-$app['queue-client']->consume($callback);
+$app['queue-client']->consume();
