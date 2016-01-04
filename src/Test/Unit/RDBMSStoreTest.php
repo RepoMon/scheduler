@@ -26,20 +26,20 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
             ->getMock();
 
         $store = new RDBMSStore($client, 'tasks');
-        $url = 'https://github.com/test/test-repo';
+        $full_name = 'test/test-repo';
 
         $mock_statement = $this->getMockBuilder('PDOStatement')
             ->getMock();
         $client->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO tasks (url, hour, minute, frequency, timezone) VALUES(:url, :hour, :minute, :frequency, :timezone)')
+            ->with('INSERT INTO tasks (full_name, hour, minute, frequency, timezone) VALUES(:full_name, :hour, :minute, :frequency, :timezone)')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => $url, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC']);
+            ->with([':full_name' => $full_name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC']);
 
-        $store->add($url, $hour, $frequency, $timezone);
+        $store->add($full_name, $hour, $frequency, $timezone);
     }
 
     public function getAddData()
@@ -96,7 +96,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testGetByUrl()
+    public function testGetByFullName()
     {
         $client = $this->getMockBuilder('PDOMock')
             ->getMock();
@@ -108,18 +108,18 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $client->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM tasks WHERE url = :url')
+            ->with('SELECT * FROM tasks WHERE full_name = :full_name')
             ->will($this->returnValue($mock_statement));
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':url' => 'owner/repo']);
+            ->with([':full_name' => 'owner/repo']);
 
         $mock_statement->expects($this->once())
             ->method('fetchAll')
             ->will($this->returnValue(['owner/repo']));
 
-        $task = $store->getByUrl('owner/repo');
+        $task = $store->getByFullName('owner/repo');
 
         $this->assertSame(['owner/repo'], $task);
     }
