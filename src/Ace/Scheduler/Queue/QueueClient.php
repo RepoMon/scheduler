@@ -3,6 +3,7 @@
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Channel\AMQPChannel;
+use Exception;
 
 /**
  * @author timrodger
@@ -115,7 +116,11 @@ class QueueClient
             $event = json_decode($message->body, true);
 
             if (array_key_exists($event['name'], $handlers)){
-                $handlers[$event['name']]($event);
+                try {
+                    $handlers[$event['name']]($event);
+                } catch (Exception $ex) {
+                    print $ex->getMessage();
+                }
             }
         };
 
