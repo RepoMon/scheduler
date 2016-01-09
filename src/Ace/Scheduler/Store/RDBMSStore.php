@@ -50,7 +50,7 @@ class RDBMSStore implements StoreInterface
                 ':hour' => intval($time->format('H')),
                 ':minute' => 1,
                 ':frequency' => intval($frequency),
-                ':timezone' => 'UTC'
+                ':timezone' => $timezone
             ]
         );
 
