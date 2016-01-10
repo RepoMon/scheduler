@@ -16,7 +16,7 @@ RUN apt-get update -qq && \
     git \
     cron
 
-ADD files/etc/crontab /home/app/crontab
+ADD files/etc/crontab /etc/cron.d/schedule
 RUN touch /var/log/cron.log
 
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -39,6 +39,6 @@ WORKDIR /home/app
 RUN composer install --prefer-dist && \
     apt-get clean
 
-RUN crontab /home/app/crontab
+#RUN crontab /home/app/crontab
 
 USER root

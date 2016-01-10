@@ -11,10 +11,15 @@ $app->boot();
 
 $now = time();
 
-printf("rabbit host: %s port: %s channel: %s\n",
-    $app['config']->getRabbitHost(),
-    $app['config']->getRabbitPort(),
-    $app['config']->getRabbitChannelName()
+file_put_contents(
+        "/tmp/publish.log",
+        sprintf("rabbit host: %s port: %s channel: %s at %s\n",
+            $app['config']->getRabbitHost(),
+            $app['config']->getRabbitPort(),
+            $app['config']->getRabbitChannelName(),
+            date('c', $now)
+        ),
+        FILE_APPEND
 );
 
 $event = [
