@@ -37,7 +37,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':full_name' => $full_name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC']);
+            ->with([':full_name' => $full_name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => $timezone]);
 
         $store->add($full_name, $timezone, $hour, 1);
     }
@@ -64,7 +64,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':full_name' => $full_name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => 'UTC']);
+            ->with([':full_name' => $full_name, ':hour' => $expected_hour, ':minute' => 1, ':frequency' => 1, ':timezone' => $timezone]);
 
         $store->add($full_name, $timezone);
     }
