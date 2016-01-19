@@ -30,9 +30,6 @@ COPY src/ /home/app/
 RUN chmod +x /home/app/run.sh
 RUN chmod +x /home/app/run-all.sh
 
-# remove any development cruft
-RUN rm -rf /home/app/vendor/*
-
 WORKDIR /home/app
 
 # Install dependencies
