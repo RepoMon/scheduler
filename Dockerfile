@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM php:latest
 
 MAINTAINER Tim Rodger <tim.rodger@gmail.com>
 
@@ -6,15 +6,14 @@ EXPOSE 80
 
 RUN apt-get update -qq && \
     apt-get install -y \
-    php5 \
-    php5-cli \
-    php5-intl \
-    php5-mysql \
     curl \
+    libicu-dev \
     zip \
     unzip \
-    git \
-    cron
+    git
+
+# install bcmath and mbstring for videlalvaro/php-amqplib
+RUN docker-php-ext-install bcmath mbstring
 
 ADD files/etc/crontab /etc/cron.d/schedule
 RUN touch /var/log/cron.log
