@@ -11,16 +11,16 @@ $app->boot();
 
 $now = time();
 
-file_put_contents(
-        "/tmp/publish.log",
-        sprintf("rabbit host: %s port: %s channel: %s at %s\n",
-            $app['config']->getRabbitHost(),
-            $app['config']->getRabbitPort(),
-            $app['config']->getRabbitChannelName(),
-            date('c', $now)
-        ),
-        FILE_APPEND
-);
+//file_put_contents(
+//        "/tmp/publish.log",
+//        sprintf("rabbit host: %s port: %s channel: %s at %s\n",
+//            $app['config']->getRabbitHost(),
+//            $app['config']->getRabbitPort(),
+//            $app['config']->getRabbitChannelName(),
+//            date('c', $now)
+//        ),
+//        FILE_APPEND
+//);
 
 $event = [
     'name' => 'repo-mon.scheduler.heartbeat',
@@ -33,10 +33,12 @@ $app['queue-client']->publish($event);
 $tasks = $app['store']->get($now);
 
 foreach ($tasks as $task) {
-
-    $event = [
-        'name' => 'repo-mon.update.scheduled',
-        'data' => ['full_name' => $task['full_name']]
-    ];
-    $app['queue-client']->publish($event);
+    $app['queue-client']->publish(
+        [
+            'name' => 'repo-mon.update.scheduled',
+            'data' => [
+                'full_name' => $task['full_name']
+            ]
+        ]
+    );
 }

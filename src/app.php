@@ -23,7 +23,6 @@ $app->register(new ConfigProvider());
 $app->register(new StoreProvider());
 $app->register(new QueueClientProvider());
 
-
 /**
  * Get a schedule
  */
@@ -32,18 +31,6 @@ $app->get('/schedules/{repository}', function(Request $request, $repository) use
     $result = json_encode($app['store']->getByFullName($repository), JSON_UNESCAPED_SLASHES);
 
     return new Response($result, 200);
-
-})->assert('repository', '.+');
-
-/**
- * Remove a schedule - should be performed by consuming an event
- * no need for an endpoint
- */
-$app->delete('/schedules/{repository}', function(Request $request, $repository) use ($app){
-
-    $app['store']->delete($repository);
-
-    return new Response('', 200);
 
 })->assert('repository', '.+');
 
