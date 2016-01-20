@@ -6,8 +6,11 @@ EXPOSE 80
 
 RUN apt-get update -qq && \
     apt-get install -y \
+    zip \
+    unzip \
     libicu-dev \
-    cron
+    cron \
+    git
 
 # install bcmath and mbstring for videlalvaro/php-amqplib
 RUN docker-php-ext-install bcmath mbstring pdo_mysql
