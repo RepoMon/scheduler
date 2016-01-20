@@ -13,7 +13,7 @@ RUN apt-get update -qq && \
     git
 
 # install bcmath and mbstring for videlalvaro/php-amqplib
-RUN docker-php-ext-install bcmath mbstring
+RUN docker-php-ext-install bcmath mbstring pdo_mysql
 
 ADD files/etc/crontab /etc/cron.d/schedule
 RUN touch /var/log/cron.log
