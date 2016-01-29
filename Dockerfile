@@ -1,8 +1,8 @@
-FROM php:latest
+FROM php:7-fpm
 
 MAINTAINER Tim Rodger <tim.rodger@gmail.com>
 
-EXPOSE 80
+EXPOSE 9000
 
 RUN apt-get update -qq && \
     apt-get install -y \

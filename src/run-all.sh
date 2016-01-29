@@ -2,6 +2,4 @@
 
 /home/app/run.sh &
 
-cd /home/app/public
-
-php -S 0.0.0.0:80
+php-fpm
