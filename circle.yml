@@ -1,0 +1,10 @@
+general:
+  build_dir: src
+
+machine:
+  php:
+    version: 7.0.0RC7
+
+test:
+  override:
+    - phpunit -c phpunit.xml
