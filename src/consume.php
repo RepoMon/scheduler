@@ -32,7 +32,7 @@ $addHandler = function($event) use ($store) {
 
 $removeHandler = function($event) use ($store) {
     $result = $store->delete($event['data']['full_name']);
-    echo " Result of insert is '$result'\n";
+    echo " Result of delete is '$result'\n";
 };
 
 $app['queue-client']->addEventHandler('repo-mon.repository.activated', $addHandler);
