@@ -81,7 +81,9 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        return $statement->fetchAll();
+        $result = $statement->fetchAll();
+        $statement->closeCursor();
+        return $result;
     }
 
     /**
@@ -98,6 +100,8 @@ class RDBMSStore implements StoreInterface
         );
 
         $all = $statement->fetchAll();
+        $statement->closeCursor();
+
         if (!count($all)){
             throw new NotFoundException("No schedules found for '$full_name'");
         }
@@ -117,5 +121,6 @@ class RDBMSStore implements StoreInterface
                 ':full_name' => $full_name
             ]
         );
+        $statement->closeCursor();
     }
 }

@@ -9,4 +9,5 @@ while (true)
 do
     php consume.php
     sleep 1
+    echo "restarting service"
 done
