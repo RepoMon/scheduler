@@ -8,7 +8,7 @@ use Ace\Scheduler\Store\RDBMSStoreFactory;
  * @author timrodger
  * Date: 17/07/15
  */
-class StoreProvider implements ServiceProviderInterface
+class StoreFactoryProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
@@ -17,13 +17,12 @@ class StoreProvider implements ServiceProviderInterface
     public function boot(Application $app)
     {
         $config = $app['config'];
-        $factory = new RDBMSStoreFactory(
+
+        $app['store-factory'] = new RDBMSStoreFactory(
             $config->getDbHost(),
             $config->getDbName(),
             $config->getDbUser(),
             $config->getDbPassword()
         );
-
-        $app['store'] = $factory->create();
     }
 }

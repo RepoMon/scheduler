@@ -11,7 +11,7 @@ use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;
 
 use Ace\Scheduler\Provider\ConfigProvider;
-use Ace\Scheduler\Provider\StoreProvider;
+use Ace\Scheduler\Provider\StoreFactoryProvider;
 use Ace\Scheduler\Provider\QueueClientProvider;
 
 $app = new Application();
@@ -20,7 +20,7 @@ $app['logger'] = new Logger('log');
 $app['logger']->pushHandler(new ErrorLogHandler());
 
 $app->register(new ConfigProvider());
-$app->register(new StoreProvider());
+$app->register(new StoreFactoryProvider());
 $app->register(new QueueClientProvider());
 
 /**
@@ -28,7 +28,9 @@ $app->register(new QueueClientProvider());
  */
 $app->get('/schedules/{repository}', function(Request $request, $repository) use ($app){
 
-    $result = json_encode($app['store']->getByFullName($repository), JSON_UNESCAPED_SLASHES);
+    $result = json_encode($app['store-factory']
+        ->create()
+        ->getByFullName($repository), JSON_UNESCAPED_SLASHES);
 
     return new Response($result, 200);
 

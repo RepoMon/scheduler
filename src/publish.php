@@ -21,7 +21,9 @@ $app['queue-client']->publish(
     ]
 );
 
-$tasks = $app['store']->get($now);
+$store_factory = $app['store-factory']->create();
+
+$tasks = $store->get($now);
 
 foreach ($tasks as $task) {
     $app['queue-client']->publish(

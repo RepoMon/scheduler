@@ -4,30 +4,30 @@
 2/2/2016 10:21:26 PM
 2/2/2016 10:21:26 PMFatal error: Uncaught Ace\RepoMan\Store\UnavailableException: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php:91
 2/2/2016 10:21:26 PMStack trace:
-2/2/2016 10:21:26 PM#0 /home/app/Ace/RepoMan/Provider/StoreProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
-2/2/2016 10:21:26 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreProvider->boot(Object(Silex\Application))
+2/2/2016 10:21:26 PM#0 /home/app/Ace/RepoMan/Provider/StoreFactoryProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
+2/2/2016 10:21:26 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreFactoryProvider->boot(Object(Silex\Application))
 2/2/2016 10:21:26 PM#2 /home/app/consume.php(15): Silex\Application->boot()
 2/2/2016 10:21:26 PM#3 {main}
 2/2/2016 10:21:26 PM  thrown in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php on line 91
 2/2/2016 10:21:27 PM
 2/2/2016 10:21:27 PMFatal error: Uncaught Ace\RepoMan\Store\UnavailableException: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php:91
 2/2/2016 10:21:27 PMStack trace:
-2/2/2016 10:21:27 PM#0 /home/app/Ace/RepoMan/Provider/StoreProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
-2/2/2016 10:21:27 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreProvider->boot(Object(Silex\Application))
+2/2/2016 10:21:27 PM#0 /home/app/Ace/RepoMan/Provider/StoreFactoryProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
+2/2/2016 10:21:27 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreFactoryProvider->boot(Object(Silex\Application))
 2/2/2016 10:21:27 PM#2 /home/app/consume.php(15): Silex\Application->boot()
 2/2/2016 10:21:27 PM#3 {main}
 2/2/2016 10:21:27 PM  thrown in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php on line 91
 2/2/2016 10:21:28 PM
 2/2/2016 10:21:28 PMFatal error: Uncaught Ace\RepoMan\Store\UnavailableException: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php:91
 2/2/2016 10:21:28 PMStack trace:
-2/2/2016 10:21:28 PM#0 /home/app/Ace/RepoMan/Provider/StoreProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
-2/2/2016 10:21:28 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreProvider->boot(Object(Silex\Application))
+2/2/2016 10:21:28 PM#0 /home/app/Ace/RepoMan/Provider/StoreFactoryProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
+2/2/2016 10:21:28 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreFactoryProvider->boot(Object(Silex\Application))
 2/2/2016 10:21:28 PM#2 /home/app/consume.php(15): Silex\Application->boot()
 2/2/2016 10:21:28 PM#3 {main}
 2/2/2016 10:21:28 PM  thrown in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php on line 91
 2/2/2016 10:21:29 PM
 2/2/2016 10:21:29 PMFatal error: Uncaught Ace\RepoMan\Store\UnavailableException: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/app/Ace/RepoMan/Store/RDBMSStoreFactory.php:91
 2/2/2016 10:21:29 PMStack trace:
-2/2/2016 10:21:29 PM#0 /home/app/Ace/RepoMan/Provider/StoreProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
-2/2/2016 10:21:29 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreProvider->boot(Object(Silex\Application))
+2/2/2016 10:21:29 PM#0 /home/app/Ace/RepoMan/Provider/StoreFactoryProvider.php(39): Ace\RepoMan\Store\RDBMSStoreFactory->create()
+2/2/2016 10:21:29 PM#1 /home/app/vendor/silex/silex/src/Silex/Application.php(192): Ace\RepoMan\Provider\StoreFactoryProvider->boot(Object(Silex\Application))
 2/2/2016 10:21:29 PM#2 /home/app/consume.php(15): Silex\Application->boot()

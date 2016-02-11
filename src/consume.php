@@ -16,9 +16,11 @@ printf("rabbit host: %s port: %s channel: %s\n",
     $app['config']->getRabbitChannelName()
 );
 
-$store = $app['store'];
+$store_factory = $app['store-factory'];
 
-$addHandler = function($event) use ($store) {
+$addHandler = function($event) use ($store_factory) {
+
+    $store = $store_factory->create();
 
     $store->delete($event['data']['full_name']);
 
@@ -30,8 +32,11 @@ $addHandler = function($event) use ($store) {
     echo " Result of insert is '$result'\n";
 };
 
-$removeHandler = function($event) use ($store) {
+$removeHandler = function($event) use ($store_factory) {
+
+    $store = $store_factory->create();
     $result = $store->delete($event['data']['full_name']);
+
     echo " Result of delete is '$result'\n";
 };
 
