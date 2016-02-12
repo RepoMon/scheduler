@@ -77,7 +77,7 @@ class RDBMSStore implements StoreInterface
         $statement->execute(
             [
                 ':hour' => intval($time->format('H')),
-                ':minute' => intval($time->format('m')),
+                ':minute' => intval($time->format('i')),
             ]
         );
 

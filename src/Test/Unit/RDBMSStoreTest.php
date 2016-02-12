@@ -112,7 +112,7 @@ class RDBMSStoreTest extends PHPUnit_Framework_TestCase
 
         $mock_statement->expects($this->once())
             ->method('execute')
-            ->with([':hour' => $expected_hour, ':minute' => '1']);
+            ->with([':hour' => $expected_hour, ':minute' => 0]);
 
         $store->get($timestamp);
     }
