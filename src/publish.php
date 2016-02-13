@@ -21,7 +21,7 @@ $app['queue-client']->publish(
     ]
 );
 
-$store_factory = $app['store-factory']->create();
+$store = $app['store-factory']->create();
 
 $tasks = $store->get($now);
 
