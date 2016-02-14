@@ -81,7 +81,7 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        $result = $statement->fetchAll();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         $statement->closeCursor();
         return $result;
     }
@@ -99,7 +99,7 @@ class RDBMSStore implements StoreInterface
             ]
         );
 
-        $all = $statement->fetchAll();
+        $all = $statement->fetchAll(PDO::FETCH_ASSOC);
         $statement->closeCursor();
 
         if (!count($all)){
